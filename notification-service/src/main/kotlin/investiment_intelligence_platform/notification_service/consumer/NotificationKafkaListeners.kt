@@ -20,7 +20,10 @@ class NotificationKafkaListeners(
 ) {
 	private val log = LoggerFactory.getLogger(javaClass)
 
-	@KafkaListener(topics = ["ml-prediction-generated"])
+	@KafkaListener(
+		topics = ["ml-prediction-generated"],
+		groupId = "\${spring.kafka.consumer.group-id:notification-service}",
+	)
 	fun onMlPrediction(payload: String, ack: Acknowledgment) {
 		try {
 			val p = objectMapper.readValue(payload, MlPredictionPayload::class.java)
@@ -34,7 +37,10 @@ class NotificationKafkaListeners(
 		}
 	}
 
-	@KafkaListener(topics = ["market-data-updated"])
+	@KafkaListener(
+		topics = ["market-data-updated"],
+		groupId = "\${spring.kafka.consumer.group-id:notification-service}",
+	)
 	fun onMarketData(payload: String, ack: Acknowledgment) {
 		try {
 			val p = objectMapper.readValue(payload, MarketDataPayload::class.java)
