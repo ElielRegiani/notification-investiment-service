@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual_immediate
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2s
+
+notification:
+  deduplication:
+    ttl-minutes: ${DEDUP_TTL_MINUTES:10}
+  user-service:
+    base-url: ${USER_SERVICE_URL:http://localhost:8081}
+    timeout-seconds: ${USER_SERVICE_TIMEOUT_SECONDS:10}
+  chat-service:
+    base-url: ${CHAT_SERVICE_URL:http://localhost:8082}
+    timeout-seconds: ${CHAT_SERVICE_TIMEOUT_SECONDS:10}
+  http:
+    max-retries: 3
+    initial-backoff-ms: 200
+    max-backoff-ms: 2000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    investiment_intelligence_platform.notification_service: INFO
