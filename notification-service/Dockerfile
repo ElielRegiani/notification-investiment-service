@@ -2,11 +2,13 @@
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
-COPY gradlew gradlew.bat settings.gradle.kts build.gradle.kts ./
+COPY gradlew gradlew.bat settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY src ./src
 
+# Linux: executable bit + strip CRLF if the wrapper was checked out with Windows line endings
 RUN chmod +x gradlew \
+	&& sed -i 's/\r$//' gradlew \
 	&& ./gradlew bootJar --no-daemon -x test
 
 # Run stage

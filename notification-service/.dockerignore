@@ -1,8 +1,9 @@
-.gradle
-build
-.idea
+.gradle/
+build/
+out/
+.idea/
 *.iml
-.git
+.git/
 .gitignore
 **/.DS_Store
 **/Thumbs.db
